@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-login-form.component.scss'],
 })
 export class UserLoginFormComponent implements OnInit {
-  @Input() userData = { username: '', password: '' };
+  @Input() userData = { username: '', password: ''};
 
   constructor(
     public fetchApiData: FetchApiDataService,
@@ -20,29 +20,27 @@ export class UserLoginFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   loginUser(): void {
-    this.fetchApiData.userLogin(this.userData).subscribe(
-      (res) => {
+      this.fetchApiData.userLogin(this.userData).subscribe(res => {
         this.dialogRef.close(); // Close the dialog on successful login
-        this.snackBar.open('Login successful', 'OK', {
-          duration: 2000,
+        this.snackBar.open('Login successful', 'OK', { 
+            duration: 2000 
         });
         let user = {
-          ...res.user,
-          id: res.user._id,
-          password: this.userData.password,
-          token: res.token,
-        };
-        localStorage.setItem('user', JSON.stringify(user));
-        this.router.navigate(['movies']);
-      },
-      (res) => {
-        this.snackBar.open('Login fail', 'OK', {
-          duration: 2000,
-        });
-      }
-    );
-  }
+            ...res.user,
+            id: res.user._id,
+            password: this.userData.password,
+            token: res.token
+        }
+        localStorage.setItem("user", JSON.stringify(user));
+        this.router.navigate(["movies"]);
+    }, res => {
+        this.snackBar.open("Login fail", "OK", {
+            duration: 2000
+        })
+    })
+}
 }

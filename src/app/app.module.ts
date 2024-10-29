@@ -1,12 +1,7 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-// import { AppRoutingModule } from './app-routing.module';
-import { RouterModule, Routes } from '@angular/router'; 
-import {
-  HttpClientModule,
-  provideHttpClient,
-  withFetch,
-} from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router'; // Import RouterModule here
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,14 +29,14 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     UserRegistrationFormComponent,
-    UserLoginFormComponent,
+    UserLoginFormComponent, 
     MovieCardComponent,
     WelcomePageComponent,
-    ProfileComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes), 
+    RouterModule.forRoot(appRoutes),  // Make sure RouterModule is imported correctly
     HttpClientModule,
     BrowserAnimationsModule,
     MatInputModule,
@@ -52,11 +47,11 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatIconModule,
     FormsModule,
-    ReactiveFormsModule,
-    // AppRoutingModule,
+    ReactiveFormsModule
   ],
-  providers: [provideHttpClient(withFetch())],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [
+    provideHttpClient(withFetch()) 
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
