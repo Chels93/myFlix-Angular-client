@@ -3,28 +3,24 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
+// Define the ApiError interface
+interface ApiError {
+  type: string;
+  value: string;
+  msg: string;
+  path: string;
+  location: string;
+}
+
 // Ensure the API URL ends with a '/'
-const apiUrl = 'https://mymoviesdb-6c5720b5bef1.herokuapp.com';
+const apiUrl = 'https://mymoviesdb-6c5720b5bef1.herokuapp.com/';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class FetchApiDataService {
+
   constructor(private http: HttpClient) {}
-
-  private getToken(): string {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user).token : '';
-  }
-
-  private handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-        console.error('Some error occurred', error.error.message);
-    } else {
-        console.error(
-            `Error Status code ${error.status}, ` +
-            `Error body is: ${error.error}`
-        );
-    }
-    return throwError('An error occurred. Please try again later.');
-  }
 
   public userRegistration(userDetails: any): Observable<any> {
     console.log('User Registration Data:', userDetails);
@@ -36,23 +32,12 @@ export class FetchApiDataService {
   public userLogin(userDetails: any): Observable<any> {
     console.log('User Login Data:', userDetails);
     return this.http.post(apiUrl + 'login', userDetails).pipe(
-      map((response: any) => {
-        // Assuming the token is returned in the response
-        if (response.token) {
-          localStorage.setItem('token', response.token); // Store token in localStorage
-        }
-        return response;
-      }),
       catchError(this.handleError)
     );
   }
 
   public getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No token found, please log in.');
-      return throwError('No token found, please log in.');
-    }
     return this.http.get(apiUrl + 'movies', {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token
@@ -65,10 +50,6 @@ export class FetchApiDataService {
 
   public getOneMovie(title: string): Observable<any> {
     const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No token found, please log in.');
-      return throwError('No token found, please log in.');
-    }
     return this.http.get(apiUrl + `movies/${title}`, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token
@@ -79,8 +60,36 @@ export class FetchApiDataService {
     );
   }
 
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'Unknown error!';
+
+    // Client-side error
+    if (error.error instanceof ErrorEvent) {
+      console.error('A client-side or network error occurred:', error.error.message);
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } 
+    // Server-side error
+    else {
+      console.error(`Backend returned code ${error.status}, body was: ${JSON.stringify(error.error)}`);
+      errorMessage = `Backend returned code ${error.status}: ${error.error.message || 'No additional error message'}`;
+
+      // Specific handling for status code 0 (network issues, CORS)
+      if (error.status === 0) {
+        errorMessage = 'Network error or CORS issue. Please ensure the server is running and accessible.';
+      }
+
+      // Handle detailed API validation errors if available
+      if (error.error && Array.isArray(error.error.errors)) {
+        const apiErrors: ApiError[] = error.error.errors;
+        errorMessage = apiErrors.map((err: ApiError) => `${err.path}: ${err.msg}`).join(', ');
+      }
+    }
+
+    // Always log the error and return an observable with the error message
+    return throwError(errorMessage);
+  }
+
   private extractResponseData(res: any): any {
-    const body = res; 
-    return body || { };
+    return res || {};
   }
 }
