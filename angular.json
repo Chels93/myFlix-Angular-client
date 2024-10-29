@@ -67,14 +67,14 @@
           "serve": {
             "builder": "@angular-devkit/build-angular:dev-server",
             "options": {
-              "buildTarget": "myFlix-Angular:build"
+              "browserTarget": "myFlix-Angular:build"
             },
             "configurations": {
               "production": {
-                "buildTarget": "myFlix-Angular:build:production"
+                "browserTarget": "myFlix-Angular:build:production"
               },
               "development": {
-                "buildTarget": "myFlix-Angular:build:development"
+                "browserTarget": "myFlix-Angular:build:development"
               }
             },
             "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
           "extract-i18n": {
             "builder": "@angular-devkit/build-angular:extract-i18n",
             "options": {
-              "buildTarget": "myFlix-Angular:build"
+              "browserTarget": "myFlix-Angular:build"
             }
           },
           "test": {
