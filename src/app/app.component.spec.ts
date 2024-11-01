@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { RouterOutlet } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms'; // Import necessary modules if used in the component
+import { ReactiveFormsModule } from '@angular/forms'; 
 import { MatDialog } from '@angular/material/dialog';
 
 describe('AppComponent', () => {

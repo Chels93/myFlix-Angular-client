@@ -1,0 +1,15 @@
+.movie-card {
+    margin: 10px;
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  // Optional: add responsiveness
+  @media (max-width: 600px) {
+    .movie-card {
+      margin: 5px;
+    }
+  }
+  

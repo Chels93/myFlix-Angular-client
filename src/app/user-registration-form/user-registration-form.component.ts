@@ -11,14 +11,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-registration-form',
-  standalone: true,
-  imports: [
-    MatCardModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    ReactiveFormsModule, 
-    CommonModule
-  ],
   templateUrl: './user-registration-form.component.html',
   styleUrls: ['./user-registration-form.component.scss'],
 })
@@ -34,6 +26,10 @@ export class UserRegistrationFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize the form with required validators
+    this.initForm();
+  }
+
+  private initForm(): void {
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],  // Username field is required
       password: ['', [Validators.required, Validators.minLength(6)]],  // Password with a minimum length
@@ -75,6 +71,7 @@ export class UserRegistrationFormComponent implements OnInit {
 
   // Extract and format error message from the API response
   private extractErrorMessage(error: any): string {
+    // You can define an interface for your error structure if needed
     if (error.error && error.error.errors) {
       return error.error.errors
         .map((err: { path: string; msg: string }) => `${err.path}: ${err.msg}`)
